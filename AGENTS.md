@@ -1,4 +1,4 @@
-# Agent guide — gamekit (PRIVATE for now)
+# Agent guide — gamekit
 
 The game layer for the mlopt game, extracted from
 `handl-lang/graphopt` (plan 0032 phase 4).  Python 3.13; the shipped
