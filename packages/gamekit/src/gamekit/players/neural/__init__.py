@@ -73,10 +73,10 @@ def make(
             "held-in pages' memoized verdicts"
         )
 
-    import torch
-    from mlopt_core.features import compute_features
-    from mlopt_core.trajectories import RuleSample, rule_vector
-    from mlopt_torch.learned_policy import (
+    import torch  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from mlopt_core.features import compute_features  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from mlopt_core.trajectories import RuleSample, rule_vector  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from mlopt_torch.learned_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
         input_vector,
         train_rule_value,
     )
@@ -116,7 +116,7 @@ def make(
 
     ctx["score_fn"] = scorer
 
-    from mlopt_discovery.meta_arena import Action
+    from mlopt_discovery.meta_arena import Action  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     def mk(_i: int) -> Any:
         def player(state: Any) -> Any:

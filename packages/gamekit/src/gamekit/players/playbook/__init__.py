@@ -78,8 +78,8 @@ def _open_drain(ctx: dict) -> Callable[[int], Any]:
     Deposits ``ctx["score_fn"]`` — the same scorer the episode arm
     ranks by, so the leaderboard's AP column prices its ordering.
     """
-    from mlopt_discovery import proposal as lp
-    from mlopt_discovery.meta_arena import Action
+    from mlopt_discovery import proposal as lp  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from mlopt_discovery.meta_arena import Action  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     ctx["score_fn"] = lp._heuristic_score
 
@@ -104,7 +104,7 @@ def _open_drain(ctx: dict) -> Callable[[int], Any]:
 
 def _pair_greedy(tensors: Any, sizes: dict[int, int]) -> float:
     """Cheapest-pair contraction — the contraction board's playbook."""
-    from mlopt_torch.contraction_policy import greedy
+    from mlopt_torch.contraction_policy import greedy  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     return greedy(tensors, sizes)
 
@@ -122,19 +122,19 @@ def make(
     if spec.name == "greedy":
         if domain == "contraction":
             return lambda i: _pair_greedy
-        from mlopt_discovery import meta_arena as ma
+        from mlopt_discovery import meta_arena as ma  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
         return lambda i: ma.GreedyPlayer()
     if domain == "open":
         return _open_drain(ctx)
     if domain == "search":
-        from mlopt_discovery.play import _scripted_search
+        from mlopt_discovery.play import _scripted_search  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
         return lambda i: _scripted_search()
     if domain == "player":
-        from mlopt_discovery import player_arena as pa
+        from mlopt_discovery import player_arena as pa  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
         return lambda i: pa.GreedyEditor()
-    from mlopt_discovery import meta_arena as ma
+    from mlopt_discovery import meta_arena as ma  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     return lambda i: ma.ScriptedPlayer()

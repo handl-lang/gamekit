@@ -76,7 +76,7 @@ def make(
     ``ctx['score_fn']`` deposits the candidate-only page ranker.
     """
     del spec
-    from mlopt_discovery.play import DOMAINS
+    from mlopt_discovery.play import DOMAINS  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     ctx = {} if ctx is None else ctx
     spec0 = DOMAINS[domain].spec

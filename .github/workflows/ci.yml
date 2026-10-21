@@ -1,0 +1,45 @@
+# CI — scoped mirror of the parent monorepo's gates (plan 0032 phase 4).
+# Gates that don't apply here (torch/CUDA forcing, bandit/semgrep/pip-audit
+# network scans, radon ratchet, typeguard contracts) stay in graphopt;
+# this repo runs lint/format/typecheck/import-linter + the suite under
+# the re-measured coverage floor.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: uv sync (dev group)
+        run: uv sync --group dev
+
+      - name: ruff check
+        run: .venv/bin/ruff check packages
+
+      - name: ruff format --check
+        run: .venv/bin/ruff format --check packages
+
+      - name: ty check
+        run: .venv/bin/ty check
+
+      - name: vulture
+        run: .venv/bin/vulture packages
+
+      - name: import-linter
+        run: .venv/bin/lint-imports
+
+      - name: coverage run (full suite)
+        run: >-
+          .venv/bin/coverage run
+          --source=gamekit
+          -m pytest tests/ -q
+
+      - name: coverage report (floor in pyproject.toml)
+        run: .venv/bin/coverage report -m

@@ -79,7 +79,7 @@ def make(
     ``temperature`` (default ``SAMPLE_TEMP``), ``device`` (default
     ``"cpu"``) and optionally ``path`` for a non-default artifact.
     """
-    from mlopt_torch.contraction_policy import (
+    from mlopt_torch.contraction_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
         SAMPLE_TEMP,
         load_contraction_policy,
     )

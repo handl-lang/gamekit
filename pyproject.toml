@@ -1,0 +1,123 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gamekit-meta"
+version = "0.1.0dev"
+description = "Meta distribution for the gamekit repo — the game layer for the mlopt game: Board protocol, episode/train/eval drivers, the player registry machinery, the scoring spec, score calibration and the game weight tables.  Extracted from handl-lang/graphopt (plan 0032 phase 4)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["gamekit"]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    "coverage>=7.0",
+    "ty==0.0.84",
+    "vulture>=2.16",
+    "import-linter>=2.15",
+]
+
+# The root project is a pure meta distribution — the package lives in
+# packages/gamekit.
+[tool.setuptools]
+packages = []
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+gamekit = { workspace = true }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.vulture]
+min_confidence = 80
+paths = ["packages"]
+
+# import-linter: the intra-repo slice of the parent's contracts —
+# the game kernel is substrate-free by design (``gamekit ⊥ eqsat``).
+# The kernel leaf modules import nothing outside the stdlib — no
+# substrate, no backend, no domain package (the player *folders* are
+# deliberately excluded: their ``make`` factories bind domain
+# machinery lazily, which is the registry contract working as
+# intended).
+[tool.importlinter]
+root_packages = ["gamekit"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "the game kernel is substrate-free"
+type = "forbidden"
+source_modules = [
+    "gamekit.engine",
+    "gamekit.scoring",
+    "gamekit.calibrate",
+    "gamekit.advantage",
+    "gamekit.gamedata",
+    "gamekit.players._base",
+    "gamekit.players.registry",
+]
+forbidden_modules = [
+    "mlopt_core",
+    "mlopt_torch",
+    "mlopt_carriers",
+    "mlopt_orchestrator",
+    "mlopt_cuda",
+    "mlopt_onnx",
+    "mlopt_discovery",
+    "mlopt_native",
+    "torch",
+    "numpy",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 72
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "D"]
+ignore = [
+    "E501",
+    "B008",
+    "SIM108",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.ty.environment]
+python-version = "3.13"
+extra-paths = ["packages/gamekit/src"]
+
+[tool.ty.src]
+include = ["packages"]
+exclude = []
+
+[tool.ty.terminal]
+error-on-warning = false
+
+[tool.coverage.run]
+source = ["gamekit"]
+branch = true
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+# Re-measured at the phase-4 extraction on the fresh kernel suite:
+# 98% (the parent's gamekit floor was 99% over a suite that mostly
+# ran in graphopt — the remaining misses are domain-only branches
+# inside the folder ``make`` factories).  Tighten, never lower.
+fail_under = 98
+show_missing = true
+exclude_also = [
+    "if __name__ == ['\"]__main__['\"]:",
+    "if TYPE_CHECKING:",
+    "def __repr__",
+    "raise NotImplementedError",
+    "@overload",
+    "return NotImplemented",
+]

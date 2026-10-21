@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+# worktree setups may use a symlinked venv (a file, not a directory)
+.venv
+
+# PyTorch / ML
+*.pt
+*.pth
+*.ckpt
+checkpoints/
+checkpoints/
+# ...except weights that are deliberately shipped with a package
+# (mlopt_torch.contraction_policy's bundled curriculum player).
+!packages/mlopt-torch/src/mlopt_torch/artifacts/*.pt
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+.~lock.*#
+project/
+.venv/
+
+# Coverage / profiling artifacts
+.coverage
+.coverage.*
+htmlcov/
+cov_ann/
+.pytest_cache/
+*.prof
+
+# Bench outputs
+bench/results/
+.chokkin/
+
+# Pitch decks (standalone repos)
+pitch/
+
+# mutmut working copy
+mutants/
+
+# mutmut flat-layout sandbox
+.mutmut-sandbox/
+packages/mlopt-native/target/
+
+# handl peer spike build artifacts (built by cargo, never committed)
+packages/mlopt-handl-peer/target/
+packages/mlopt-handl-peer/*.so
+
+# Root cargo workspace artifacts (mlopt-kit lives in packages/mlopt-kit)
+/target/
+
+# mlopt-experiments — standalone crate (excluded from the root
+# workspace; own lockfile is committed), fetched artifact + build dir
+/packages/mlopt-experiments/.cache/
+/packages/mlopt-experiments/target/

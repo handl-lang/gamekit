@@ -99,7 +99,7 @@ def make(
     ``rank_score`` is deposited as ``ctx["score_fn"]`` — the
     candidate-only page ordering the leaderboard's AP column prices.
     """
-    from mlopt_discovery.play import DOMAINS
+    from mlopt_discovery.play import DOMAINS  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     from gamekit.players import LearnedPlayer
 
