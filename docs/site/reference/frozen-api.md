@@ -1,5 +1,5 @@
 ::: warning Vendored slice — do not edit here
-Synced from `graphopt:docs/public_api.md` @ `fb00089` — the phase-1
+Synced from `graphopt:docs/public_api.md` @ `ed89ead` — the phase-1
 frozen manifest (`API_VERSION = "0.1.0"`). This page is the **gamekit
 slice**: the game-layer rows of the contract, landed at the plan-0032
 phase-4 split. The substrate rows are
@@ -19,7 +19,7 @@ lawdata.game}` shims live in graphopt and are not part of this contract.
 | Contract | Canonical location | Frozen surface |
 |---|---|---|
 | `Board` protocol | `gamekit.engine` | `Board` (`observe() -> state` / `step(action) -> (state, report)`; `state.done` terminates), `Report` (floor: `reward`, `terminal`), `Trajectory` (`.reports`, `.total`, `.terminal`), `run_episode(board, player, budget)`, `evaluate(arms, cases, board_of, *, budget)`, `train_policy(player, cases, board_of, *, budget)` |
-| Player registry | `gamekit.players.registry` | `PlayerSpec` (`name`/`kind`/`boards`/`schema`/`train`/`artifact`/`record`/`variant`), `BOARDS`, `EPISODE_BOARDS`, `names()`, `spec(name)`, `specs()`, `for_board(board)`, `module(name)`, **`make(name, domain, *, seed=0, ctx=None) -> (i -> player)`** — `ValueError` on an unplayed board, never a silent run |
+| Player registry | `gamekit.players.registry` | `PlayerSpec` (`name`/`kind`/`boards`/`schema`/`train`/`artifact`/`record`/`variant`), `BOARDS`, `EPISODE_BOARDS`, `names()`, **`register_player(spec, make=None)`** — the downstream-domain seam: a matching `name` unions `boards` into the shipped seat (an explicit `make` claims only the unplayed boards), a fresh name registers outright and must supply `make`; `spec(name)`, `specs()`, `for_board(board)`, `module(name)`, **`make(name, domain, *, seed=0, ctx=None) -> (i -> player)`** — `ValueError` on an unplayed board, never a silent run |
 | Player machinery | `gamekit.players` | `LinearPolicy`, `DomainSpec` (incl. `to_record`/`build_from_record`), `LearnedPlayer`, `PlayHist`, the feature parts `Bias`/`StateBroadcast`/`PlayRates`/`OpOneHot`/`ActionFeats`/`RelFeats`, `compose_featurizer`, `register_part`/`register_legal`/`register_rank`, `spec_from_record`, `PARTS`/`LEGALS`/`RANKS` |
 | Scoring spec | `gamekit.scoring` | `ScoreGate{axis, threshold, direction}`, `ScoringSpec{gates, weights, references}`, `GateVerdict`, `ScoreVerdict`, `score(spec, measured) -> ScoreVerdict`, `AXES` (`"speed"`, `"memory"`, `"launch"`, `"params"`), `DIRECTIONS` — the referee's value function **as data**; see below |
 | Substrate-free kernel | import-linter contract | `gamekit.engine`, `gamekit.scoring`, `gamekit.calibrate`, `gamekit.advantage`, `gamekit.gamedata`, `gamekit.players._base`, `gamekit.players.registry` import nothing outside the stdlib — the `gamekit ⊥ eqsat` edge, enforced (see `pyproject.toml`) |
