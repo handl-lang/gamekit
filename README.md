@@ -30,3 +30,14 @@ uv sync --group dev
 .venv/bin/ty check
 .venv/bin/lint-imports
 ```
+
+## Documentation
+
+Published site (Diátaxis): <https://handl-lang.github.io/docs/gamekit/>
+
+- [Reference](https://handl-lang.github.io/docs/gamekit/reference/) — API and schemas
+- [How-to](https://handl-lang.github.io/docs/gamekit/how-to/) — task recipes
+- [Explanation](https://handl-lang.github.io/docs/gamekit/explanation/) — design and rationale
+
+Project docs (ADRs, backlog, design notes) ship on the `project` branch and are
+published under [`/gamekit/project/`](https://handl-lang.github.io/docs/gamekit/project/).
