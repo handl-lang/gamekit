@@ -57,6 +57,7 @@ own boards through `register_player` — a registered board is not an
 | `distilled` | `distilled` | distilled | `contraction` — the sampled contraction-ordering policy |
 | `distilled-argmax` | `distilled` | distilled | `contraction` — `variant={"argmax": True}` single pass |
 | `gated` | `gated` | gated | `open` — the isolated stop channel via `forced_action` |
+| `open-gated` | `gated` | gated | `open` — `variant={"baked": True}` plays `gamedata.OPEN_GATED_PAYLOAD` from shipped data |
 
 ## The registry surface
 

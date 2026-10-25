@@ -12,6 +12,8 @@ travelled with the Board/players engine into ``gamekit``.
 * :mod:`gamekit.gamedata.features` — the player feature schemas.
 * :mod:`gamekit.gamedata.weights` — prior, reward, referee and
   learned-player weight tables.
+* :mod:`gamekit.gamedata.gates` — the ``gated`` seats' shipped
+  player payloads (spec records + head weights + κ).
 * :mod:`gamekit.gamedata.moves` — the shared move vocabulary
   (:data:`ARENA_MOVE_ORDER`): gamekit content the feature schema
   sizes its action-identity columns off; the domain side binds the
@@ -30,6 +32,7 @@ from .features import (
     META_ARENA_FEATURES,
     META_ARENA_HASH_BUCKETS,
 )
+from .gates import OPEN_GATED_PAYLOAD
 from .moves import ARENA_MOVE_ORDER
 from .weights import (
     ARENA_PLAYER_CANDIDATES,
@@ -56,6 +59,7 @@ __all__ = [
     "META_ARENA_PLAYER_WEIGHTS",
     "META_ARENA_REWARD",
     "OPEN_GAME_PLAYER_WEIGHTS",
+    "OPEN_GATED_PAYLOAD",
     "PLAYER_ARENA_PLAYER_WEIGHTS",
     "PRIOR_WEIGHTS",
     "REFEREE_SCORE",

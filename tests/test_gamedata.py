@@ -47,3 +47,25 @@ def test_weights_tables_are_numeric():
                 assert isinstance(k, str)
                 assert isinstance(v, (int, float)) or isinstance(v, dict)
     assert seen > 0
+
+
+def test_open_gated_payload_is_pure_data():
+    """The ``open-gated`` seat's payload is the serializable term:
+    JSON-clean leaves, spec blocks as records, the rank weights the
+    shipped open prior's own table (referenced, not duplicated)."""
+    import json
+
+    from gamekit.gamedata import OPEN_GATED_PAYLOAD
+
+    rec = json.loads(json.dumps(OPEN_GATED_PAYLOAD))
+    rank, stop = rec["rank"], rec["stop"]
+    assert rank["weights"] == weights.OPEN_GAME_PLAYER_WEIGHTS
+    assert OPEN_GATED_PAYLOAD["rank"]["weights"] is (
+        weights.OPEN_GAME_PLAYER_WEIGHTS
+    )
+    for block in (rank["spec"], stop["spec"]):
+        assert block["legal"] == "open" and block["rank"] == "open"
+        assert "bias" in block["features"]
+        assert block["weights"] is None
+    assert stop["kappa"] == 0.0 and stop["scorer"] is None
+    assert all(isinstance(v, float) for v in stop["weights"].values())

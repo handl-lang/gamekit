@@ -28,6 +28,7 @@ __all__ = [
     "LEGALS",
     "PARTS",
     "RANKS",
+    "SCORERS",
     "ActionFeats",
     "Bias",
     "DomainSpec",
@@ -43,6 +44,7 @@ __all__ = [
     "register_legal",
     "register_part",
     "register_rank",
+    "register_scorer",
     "spec_from_record",
 ]
 
@@ -258,6 +260,16 @@ LEGALS: dict[str, Any] = {}
 #: Domain tag -> candidate ranker ``cand -> dict``.
 RANKS: dict[str, Any] = {}
 
+#: Gate-scorer tag -> factory ``(stop_spec, params, rank_weights) ->
+#: (state, hist) -> float`` — the serialization seam for
+#: callable-path ``GatedPlayer`` arms: a ``ctx["gated"]`` payload's
+#: ``stop.scorer`` names an entry here instead of carrying the
+#: callable (the same registry idiom ``parts``/``legal``/``rank``
+#: records use; ``scorer_params`` keeps the scorer's own data —
+#: weight dict, calibrator knots — as literals).  Shipped names
+#: live with the domain that owns the scorer's semantics.
+SCORERS: dict[str, Any] = {}
+
 
 def register_part(tag: str, ctor: Callable[[], Any]) -> Callable:
     """Register *ctor* as the constructor behind part tag *tag*.
@@ -280,6 +292,18 @@ def register_rank(tag: str, fn: Any) -> Any:
     """Register *fn* as the candidate ranker for domain *tag*."""
     RANKS[tag] = fn
     return fn
+
+
+def register_scorer(tag: str, factory: Any) -> Any:
+    """Register *factory* as the scorer builder behind *tag*.
+
+    ``register_scorer("cal-head", fn)`` — a gated payload's
+    ``stop.scorer`` then names *tag*, and the seat calls
+    ``fn(stop_spec, scorer_params, rank_weights)`` for the
+    ``(state, hist) -> float`` channel scorer.
+    """
+    SCORERS[tag] = factory
+    return factory
 
 
 def _part_tag(part: Any) -> str:

@@ -31,6 +31,7 @@ from ._base import (
     LEGALS,
     PARTS,
     RANKS,
+    SCORERS,
     ActionFeats,
     Bias,
     DomainSpec,
@@ -46,6 +47,7 @@ from ._base import (
     register_legal,
     register_part,
     register_rank,
+    register_scorer,
     spec_from_record,
 )
 from ._base import _action_key as _action_key
@@ -58,6 +60,7 @@ __all__ = [
     "LEGALS",
     "PARTS",
     "RANKS",
+    "SCORERS",
     "ActionFeats",
     "Bias",
     "DomainSpec",
@@ -74,6 +77,7 @@ __all__ = [
     "register_legal",
     "register_part",
     "register_rank",
+    "register_scorer",
     "registry",
     "spec_from_record",
 ]

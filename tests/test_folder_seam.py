@@ -239,6 +239,178 @@ def test_gated_make_cfg_binds_channel(domain_env):
     assert callable(arm)
 
 
+def _stub_open_tags(monkeypatch):
+    """Seat the open spec record's registry tags on stub callables.
+
+    The shipped payload's spec records name ``open``/``open:*``
+    tags; the domain repo registers the real callables on import —
+    the test binds stand-ins so ``spec_from_record`` reifies the
+    record the same way (a legal set with a ``stop`` move so the
+    channel's ``forced_action`` decisions are observable).
+    """
+    from gamekit.players import LEGALS, PARTS, RANKS, StateBroadcast
+
+    def _legal(state):
+        if state.done:
+            return []
+        return [ToyAction("a"), ToyAction("stop")]
+
+    monkeypatch.setitem(LEGALS, "open", _legal)
+    monkeypatch.setitem(RANKS, "open", lambda cand: {"a:depth": 1.0})
+    for tag in (
+        "open:state",
+        "open:hist",
+        "open:onehot",
+        "open:action",
+        "open:score-rank",
+        "open:score-rel",
+        "open:score-x-depth",
+        "open:score-x-ops",
+    ):
+        monkeypatch.setitem(
+            PARTS, tag, lambda: StateBroadcast(lambda s: {})
+        )
+
+
+def test_open_gated_seat_builds_from_shipped_payload(
+    domain_env, monkeypatch
+):
+    """The named seat: ``make("open-gated", "open")`` plays the
+    shipped ``OPEN_GATED_PAYLOAD`` from data alone — no ctx."""
+    from gamekit.players import GatedPlayer
+
+    _stub_open_tags(monkeypatch)
+    ctx = {}
+    arm = make("open-gated", "open", seed=0, ctx=ctx)
+    player = arm(0)
+    assert isinstance(player, GatedPlayer)
+    assert callable(ctx["score_fn"])
+
+
+def test_open_gated_channel_fires_on_shipped_weights(
+    domain_env, monkeypatch
+):
+    """The w_stop literals are really bound: a negative state row
+    drops ``w·φ_stop`` under κ=0 and the channel forces ``stop``;
+    without it the head reads +0.2228 and abstains."""
+    from gamekit.players import PARTS, StateBroadcast
+
+    _stub_open_tags(monkeypatch)
+    arm = make("open-gated", "open", seed=0, ctx={})
+    player = arm(0)
+    assert player.forced_action(ToyState(0, 3)) is None  # abstains
+    monkeypatch.setitem(
+        PARTS,
+        "open:state",
+        lambda: StateBroadcast(lambda s: {"st:pending_frac": -10.0}),
+    )
+    arm = make("open-gated", "open", seed=0, ctx={})
+    act = arm(0).forced_action(ToyState(0, 3))
+    assert act is not None and act.op == "stop"
+
+
+def test_gated_payload_form_decodes(domain_env, monkeypatch):
+    """``ctx["gated"]`` in the ``{rank, stop}`` record form reifies
+    the same player the shipped seat plays."""
+    import json
+
+    from gamekit.gamedata import OPEN_GATED_PAYLOAD
+    from gamekit.players import GatedPlayer
+    from gamekit.players.gated import make as gmake
+    from gamekit.players.registry import spec
+
+    _stub_open_tags(monkeypatch)
+    cfg = {"gated": json.loads(json.dumps(OPEN_GATED_PAYLOAD))}
+    arm = gmake("open", spec=spec("gated"), seed=0, ctx=cfg)
+    player = arm(0)
+    assert isinstance(player, GatedPlayer)
+
+
+def test_gated_payload_named_scorer(domain_env, monkeypatch):
+    """``stop.scorer`` resolves through the SCORERS registry — the
+    callable-path arm's serialization seam."""
+    from gamekit.players import SCORERS, register_scorer
+    from gamekit.players.gated import make as gmake
+    from gamekit.players.registry import spec
+
+    _stub_open_tags(monkeypatch)
+    register_scorer(
+        "test-gate",
+        lambda spec, params, w: lambda s, h: params["v"],
+    )
+    rec = {
+        "features": ["bias"],
+        "legal": "open",
+        "parts": ["bias"],
+        "weights": None,
+        "rank": "open",
+        "lr": 0.05,
+    }
+    cfg = {
+        "gated": {
+            "rank": {"spec": rec, "weights": {}},
+            "stop": {
+                "scorer": "test-gate",
+                "scorer_params": {"v": -1.0},
+                "kappa": 0.0,
+            },
+        }
+    }
+    try:
+        arm = gmake("open", spec=spec("gated"), seed=0, ctx=cfg)
+        player = arm(0)
+        act = player.forced_action(ToyState(0, 3))
+        assert act is not None and act.op == "stop"
+        cfg["gated"]["stop"]["scorer_params"]["v"] = 1.0
+        player = gmake("open", spec=spec("gated"), seed=0, ctx=cfg)(0)
+        assert player.forced_action(ToyState(0, 3)) is None
+    finally:
+        SCORERS.pop("test-gate", None)
+
+
+def test_gated_payload_unknown_scorer_declines(domain_env, monkeypatch):
+    """A scorer the registry cannot name is an honest error."""
+    from gamekit.players.gated import make as gmake
+    from gamekit.players.registry import spec
+
+    _stub_open_tags(monkeypatch)
+    cfg = {"gated": {"stop": {"scorer": "no-such-gate"}}}
+    with pytest.raises(ValueError, match="unknown gated scorer"):
+        gmake("open", spec=spec("gated"), seed=0, ctx=cfg)
+
+
+def test_gated_requires_domainspec(domain_env):
+    import mlopt_discovery.play as play
+    from gamekit.players.gated import make as gmake
+    from gamekit.players.registry import spec
+
+    play.DOMAINS["bare"] = SimpleNamespace(spec=None, legal=toy_legal)
+    with pytest.raises(ValueError, match="ships no DomainSpec"):
+        gmake("bare", spec=spec("gated"), seed=0, ctx={})
+
+
+def test_gated_non_open_domain_skips_score_fn(domain_env):
+    """The ``ctx["score_fn"]`` deposit is the open board's AP probe —
+    other domains get the arm factory with no writeback."""
+    from gamekit.players.gated import make as gmake
+    from gamekit.players.registry import spec
+
+    ctx = {}
+    arm = gmake("meta", spec=spec("gated"), seed=0, ctx=ctx)
+    assert callable(arm)
+    assert "score_fn" not in ctx
+
+
+def test_gated_player_call_ranks_without_stop(domain_env, monkeypatch):
+    """``__call__`` plays the ranker's non-stop pick — the stop move
+    stays outside the softmax (``_eval_only`` filters it)."""
+    _stub_open_tags(monkeypatch)
+    arm = make("open-gated", "open", seed=0, ctx={})
+    player = arm(0)
+    act = player(ToyState(0, 3))
+    assert act is not None and act.op != "stop"
+
+
 def test_neural_requires_train_rows(domain_env):
     with pytest.raises(ValueError, match=r"ctx\['train'\]"):
         make("neural", "open", seed=0, ctx={})
