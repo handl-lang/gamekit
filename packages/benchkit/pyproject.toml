@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "benchkit"
+version = "0.1.0dev"
+description = "The mlopt benchmark harness — Case/Variant/Runner/Report, the JSONL ledger + resume checkpoints, baseline comparison, and the report renderers.  Promoted out of handl-lang/graphopt's bench/ (plan 0032): domain-agnostic, usable by any domain repo."
+requires-python = ">=3.11"
+dependencies = [
+    # The timing runner is built on torch.utils.benchmark and the
+    # env/regime/equality helpers are torch-native; the harness is
+    # torch-shaped by design (the domains it serves are torch domains).
+    "torch>=2.0",
+    # The one timing contract (median/IQR) — the same reduction the
+    # production Meter port reports.
+    "mlopt-core",
+    # The HTML/dashboard renderers (jinja2 templates).
+    "jinja2>=3.1",
+]
+
+[project.optional-dependencies]
+# Lazy surfaces: Report.to_plots / stats.to_dataframe import these at
+# call time and raise honestly when absent.
+plots = ["plotly>=5.0"]
+tables = ["polars>=1.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+benchkit = ["templates/*.j2"]

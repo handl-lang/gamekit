@@ -25,6 +25,16 @@ contract in `pyproject.toml`.
   function as data), `calibrate` (Platt/isotonic + metrics),
   `advantage` (`AdvantagePlayer` — actor-critic), `gamedata`
   (weight/feature/move tables).
+- `packages/benchkit/` — the promoted benchmark harness (plan 0032):
+  `Case`/`Variant`/`Runner`/`Report`, the JSONL ledger + resume
+  `Checkpoint`, baseline comparison (`expectation_gaps` takes the
+  caller's suite catalog as a parameter — no `bench.registry` import),
+  the `benchkit.baselines` contract types (`BaselineSpec`/`BaselineCtx`/
+  `SkipBaseline`), and the report renderers.  **Not** substrate-free:
+  it declares `torch`, `mlopt-core` and `jinja2` (the `gamekit`
+  import-linter contract covers only the `gamekit` package).  Ex-
+  `graphopt/bench/benchkit`; graphopt keeps a `bench.benchkit`
+  compatibility alias over it.
 - `tests/` — the kernel suite: a hand-rolled toy board drives every
   driver path; domain-bound coverage (players seated on real boards)
   stayed in graphopt.
