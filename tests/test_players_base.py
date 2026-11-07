@@ -244,6 +244,49 @@ def test_episode_boundary_resets_played_mask():
     assert len(acts) == 2
 
 
+def test_episode_boundary_first_move_ending_resets_mask():
+    """An episode ending on its first move must not leak the mask.
+
+    ``prev_steps`` stays 0 when the terminal observation never
+    arrives — the next board's step-0 state is indistinguishable
+    from a same-episode re-query *unless* a play already landed.
+    """
+    p = _policy()
+    p(ToyState(0, 1))  # one move, episode over — prev_steps == 0
+    acts, _feats, _exps = p._scored_unplayed(ToyState(0, 1))
+    assert len(acts) == 2  # the played move is live again
+
+
+def test_episode_boundary_first_move_ending_imitate_policy():
+    """Driver-level: ``imitate_policy`` over 1-move episodes.
+
+    Every case is a single demonstrated move; without the boundary
+    fix the second case's demo is masked by the first case's play.
+    """
+    from gamekit.engine import imitate_policy
+
+    p = _policy(weights={}, lr=0.1)
+    out = imitate_policy(
+        p,
+        lambda _i: (lambda _s: ToyAction("a")),
+        ["c0", "c1", "c2"],
+        lambda _c: ToyBoard(limit=1),
+        budget=4,
+    )
+    assert out == {"shown": 3, "imitated": 3}
+
+
+def test_same_step0_state_twice_is_not_a_boundary():
+    """A repeated step-0 observation *before* any play is not a
+    new episode — the forced_action + __call__ pattern relies on
+    it (GatedPlayer observes the same state twice per step)."""
+    p = _policy()
+    s = ToyState(0, 3)
+    p._observe(s)
+    p._observe(s)  # same state re-queried — mask/hist must persist
+    assert p._hist.n == 0 and not p._played
+
+
 # --- LearnedPlayer ------------------------------------------------------
 
 
@@ -394,4 +437,13 @@ def test_gated_player_boundary_resets_hist():
     assert g._hist.n == 1
     g._observe(ToyState(1, 3))
     g._observe(ToyState(0, 3))  # new episode → fresh hist
+    assert g._hist.n == 0
+
+
+def test_gated_player_boundary_first_move_ending_resets_hist():
+    """Same first-move-ending hole, on the gated channel's hist."""
+    g = GatedPlayer(_policy(), legal=_stop_legal)
+    g(ToyState(0, 3))  # plays once at step 0 — episode ends there
+    assert g._hist.n == 1
+    g._observe(ToyState(0, 3))  # next board's step-0 state
     assert g._hist.n == 0

@@ -524,9 +524,23 @@ class LinearPolicy:
         ``_hist`` ``None`` forever, read every call as a new episode
         and cleared ``_played`` each step, so a spec-less policy
         could re-play moves it already played.
+
+        The ``prev_steps > 0`` guard alone misses an episode that
+        ends on its first move: the player saw only the step-0
+        state, so ``_prev_steps`` is still 0 when the next board's
+        step-0 state arrives, and the stale mask/hist would leak
+        into the new episode (a demonstrated ``extract`` stays
+        masked for a whole imitation pass).  A ``steps == 0``
+        re-observation is ambiguous only *before* the episode's
+        first play — the ``forced_action`` + ``__call__`` pair
+        queries the same state twice — so the boundary also fires
+        when the played mask is already non-empty: once a move has
+        landed, a conforming board's next observation reads
+        ``steps >= 1``, and another ``steps == 0`` can only be a
+        fresh board.
         """
         if self._prev_steps < 0 or (
-            state.steps == 0 and self._prev_steps > 0
+            state.steps == 0 and (self._prev_steps > 0 or self._played)
         ):
             self._played.clear()
             self._hist = self.fresh_hist()
@@ -793,10 +807,17 @@ class GatedPlayer:
         self._prev_steps = -1
 
     def _observe(self, state: Any) -> None:
-        """Detect the episode boundary — the LinearPolicy convention."""
+        """Detect the episode boundary — the LinearPolicy convention.
+
+        Same first-move-ending hole as :meth:`LinearPolicy._observe`:
+        ``prev_steps > 0`` alone misses an episode that ended on its
+        first play, so a ``steps == 0`` state after one is a fresh
+        board — signalled here by the play-count history being
+        non-empty (``_hist.n``), which only a landed move grows.
+        """
         steps = getattr(state, "steps", 0)
         if self._prev_steps < 0 or (
-            steps == 0 and self._prev_steps > 0
+            steps == 0 and (self._prev_steps > 0 or self._hist.n)
         ):
             self._hist = PlayHist()
         self._prev_steps = steps
