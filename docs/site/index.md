@@ -38,6 +38,7 @@ declares the referee's value function *as data*.
 | `gamekit.calibrate` | Platt/isotonic score calibration + metrics |
 | `gamekit.advantage` | the actor-critic player |
 | `gamekit.gamedata` | the game weight/feature/move tables |
+| `benchkit` (`packages/benchkit`) | the benchmark harness — `Case`/`Variant`/`Runner`/`Report`, the JSONL ledger + resume `Checkpoint`, baseline comparison, report renderers; **not** substrate-free (`torch`/`mlopt-core`/`jinja2`), selftest-only check (`python -m benchkit`) until tests land |
 
 ## How it's consumed
 

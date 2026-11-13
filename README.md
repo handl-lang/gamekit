@@ -14,9 +14,21 @@ stdlib.
   `gamekit.calibrate` (Platt/isotonic calibration + metrics),
   `gamekit.advantage` (the actor-critic player),
   `gamekit.gamedata` (the game weight/feature/move tables).
+- `packages/benchkit` — the benchmark harness promoted out of
+  graphopt's `bench/` (plan 0032): `Case`/`Variant`/`Runner`/`Report`,
+  the JSONL ledger + resume `Checkpoint`, baseline comparison
+  (`benchkit.baselines` contract types — `expectation_gaps` takes the
+  caller's suite catalog, no `bench.registry` import), and the report
+  renderers (`benchkit.render` — markdown/HTML/slidev/quarto/plots).
+  **Not** substrate-free: it declares `torch`, `mlopt-core` and
+  `jinja2` — the `gamekit ⊥ eqsat` contract covers only the `gamekit`
+  package.  Its only check today is the selftest
+  (`.venv/bin/python -m benchkit`); pytest coverage lands with the
+  first domain consumer's suite.
 
 Downstream domain repos (`graphopt`, `kernelopt`) consume this as a
-pinned git+ssh dep on `packages/gamekit` — the domain brings its own
+pinned git+ssh dep on `packages/gamekit` (and `packages/benchkit`
+for the harness) — the domain brings its own
 substrate into the caller's environment; the player folders' `make`
 factories bind it lazily.
 
