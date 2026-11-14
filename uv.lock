@@ -605,7 +605,7 @@ wheels = [
 [[package]]
 name = "mlopt-core"
 version = "0.1.0.dev0"
-source = { git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.0#38422b32e7b44abb8286ed6d3a064f574e9bb7a2" }
+source = { git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.0#d7e9a5794a4c2d115e476ddff5d6a5c21b64c5c7" }
 
 [[package]]
 name = "mpmath"
