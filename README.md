@@ -27,8 +27,10 @@ stdlib.
   first domain consumer's suite.
 
 Downstream domain repos (`graphopt`, `kernelopt`) consume this as a
-pinned git+ssh dep on `packages/gamekit` (and `packages/benchkit`
-for the harness) — the domain brings its own
+pinned git dep on `packages/gamekit` (and `packages/benchkit`
+for the harness) — `branch = "main"` today, moving to
+`tag = "vX.Y.Z"` (this repo ships `v0.1.0`) once the tags are
+pushed; see `graphopt/docs/reports/git_url_distribution.md` — the domain brings its own
 substrate into the caller's environment; the player folders' `make`
 factories bind it lazily.
 

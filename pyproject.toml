@@ -35,8 +35,10 @@ gamekit = { workspace = true }
 # the one timing contract in mlopt-core — pinned git dep on the eqsat
 # substrate repo, same recipe graphopt/kernelopt use.  The ``gamekit``
 # kernel itself stays substrate-free; only ``packages/benchkit``
-# declares this dep.
-mlopt-core = { git = "https://github.com/handl-lang/eqsat.git", subdirectory = "packages/mlopt-core", branch = "main" }
+# declares this dep.  ``v0.1.0`` tags pin the git-URL-at-tag release
+# scheme — bump deliberately on releases.
+# See graphopt/docs/reports/git_url_distribution.md.
+mlopt-core = { git = "https://github.com/handl-lang/eqsat.git", subdirectory = "packages/mlopt-core", tag = "v0.1.0" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
