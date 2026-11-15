@@ -31,6 +31,7 @@ from .features import (
     ARENA_HISTORY_STATS,
     META_ARENA_FEATURES,
     META_ARENA_HASH_BUCKETS,
+    bucket,
 )
 from .gates import OPEN_GATED_PAYLOAD
 from .moves import ARENA_MOVE_ORDER
@@ -63,4 +64,5 @@ __all__ = [
     "PLAYER_ARENA_PLAYER_WEIGHTS",
     "PRIOR_WEIGHTS",
     "REFEREE_SCORE",
+    "bucket",
 ]

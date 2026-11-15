@@ -10,6 +10,9 @@ content, so it lives here; the learned weights are the tables in
 
 from __future__ import annotations
 
+import hashlib
+from collections.abc import Mapping
+
 # NOTE — the edge that used to reach back into the law half: the
 # feature schema sizes its action-identity columns off
 # ``ARENA_MOVE_ORDER``, the move vocabulary.  At the gamekit
@@ -25,7 +28,34 @@ __all__ = [
     "ARENA_HISTORY_STATS",
     "META_ARENA_FEATURES",
     "META_ARENA_HASH_BUCKETS",
+    "bucket",
 ]
+
+
+def bucket(
+    name: object,
+    kind: str,
+    widths: Mapping[str, int] | None = None,
+) -> int:
+    """Stable-hash *name* into ``widths[kind]`` — the canonical bucketer.
+
+    ``hash()`` is process-salted on strings, so identity features
+    must not use it — a trained weight table would silently re-map
+    every bucket between runs.  sha256 keeps the same name in the
+    same bucket across boards and processes.  *widths* defaults to
+    :data:`META_ARENA_HASH_BUCKETS`; callers with an overridden table
+    (``meta_player``'s widened ``"handler"`` width) pass it
+    explicitly.  This is the single home for the meta-arena-family
+    bucketing — domain players bind it rather than copying the hash
+    (the kernel player's shipped weights were trained against
+    exactly this mapping).  ``arena_player``'s arena-side bucketer is
+    a different endianness and stays its own copy.
+    """
+    table = META_ARENA_HASH_BUCKETS if widths is None else widths
+    width = table[kind]
+    digest = hashlib.sha256(str(name).encode("utf-8")).digest()
+    return int.from_bytes(digest[:4]) % width
+
 
 # ---------------------------------------------------------------------------
 #  The learned arena player — feature schema
