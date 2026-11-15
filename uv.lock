@@ -34,7 +34,7 @@ tables = [
 [package.metadata]
 requires-dist = [
     { name = "jinja2", specifier = ">=3.1" },
-    { name = "mlopt-core", git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.4" },
+    { name = "mlopt-core", git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.5" },
     { name = "plotly", marker = "extra == 'plots'", specifier = ">=5.0" },
     { name = "polars", marker = "extra == 'tables'", specifier = ">=1.0" },
     { name = "torch", specifier = ">=2.0" },
@@ -605,7 +605,7 @@ wheels = [
 [[package]]
 name = "mlopt-core"
 version = "0.1.0.dev0"
-source = { git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.4#631b8898a467680e8f3a2e9805b153e94eda4a0c" }
+source = { git = "https://github.com/handl-lang/eqsat.git?subdirectory=packages%2Fmlopt-core&tag=v0.1.5#dd2cac1d8861360328fcd892e37d5b48c0ce0364" }
 
 [[package]]
 name = "mpmath"
