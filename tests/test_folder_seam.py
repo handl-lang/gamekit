@@ -96,7 +96,7 @@ def domain_env(monkeypatch):
         return 3.25
 
     contraction = _mod(
-        "mlopt_torch.contraction_policy",
+        "kit_torch.contraction_policy",
         SAMPLE_TEMP=1.0,
         load_contraction_policy=lambda path, device="cpu": _Pol(),
         greedy=greedy,
@@ -107,7 +107,7 @@ def domain_env(monkeypatch):
         + [frozenset(ts[a] ^ ts[b])],
         random_bond_network=lambda n, seed=0: ([], {}),
     )
-    mlopt_torch = _mod("mlopt_torch")
+    kit_torch = _mod("kit_torch")
 
     def compute_features(lhs):
         return {"f": 1.0}
@@ -138,7 +138,7 @@ def domain_env(monkeypatch):
         "mlopt_core.trajectories", RuleSample=RuleSample, rule_vector=rule_vector
     )
     learned_policy = _mod(
-        "mlopt_torch.learned_policy",
+        "kit_torch.learned_policy",
         input_vector=input_vector,
         train_rule_value=train_rule_value,
     )
@@ -160,9 +160,9 @@ def domain_env(monkeypatch):
         "kit_discovery.meta_arena": meta_arena,
         "kit_discovery.proposal": proposal,
         "kit_discovery.player_arena": player_arena,
-        "mlopt_torch": mlopt_torch,
-        "mlopt_torch.contraction_policy": contraction,
-        "mlopt_torch.learned_policy": learned_policy,
+        "kit_torch": kit_torch,
+        "kit_torch.contraction_policy": contraction,
+        "kit_torch.learned_policy": learned_policy,
         "mlopt_core": mlopt_core,
         "mlopt_core.features": features,
         "mlopt_core.trajectories": trajectories,

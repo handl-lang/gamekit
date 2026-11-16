@@ -2,7 +2,7 @@
 
 A small MLP over ``features(lhs) + rule_vector(as_rule)`` trained
 per-run on the *measured* train-page outcomes
-(``mlopt_torch.learned_policy.train_rule_value``, BCE on
+(``kit_torch.learned_policy.train_rule_value``, BCE on
 ``base_cost > cand_cost`` — the on-distribution version of
 ``proposal._train_scorer``), then played as a drain: evaluate the
 pending member with the highest predicted value, ``stop`` when the
@@ -74,12 +74,12 @@ def make(
         )
 
     import torch  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
-    from mlopt_core.features import compute_features  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
-    from mlopt_core.trajectories import RuleSample, rule_vector  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
-    from mlopt_torch.learned_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from kit_torch.learned_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
         input_vector,
         train_rule_value,
     )
+    from mlopt_core.features import compute_features  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from mlopt_core.trajectories import RuleSample, rule_vector  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     samples = [
         RuleSample(

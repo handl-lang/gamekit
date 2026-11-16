@@ -104,7 +104,7 @@ def _open_drain(ctx: dict) -> Callable[[int], Any]:
 
 def _pair_greedy(tensors: Any, sizes: dict[int, int]) -> float:
     """Cheapest-pair contraction — the contraction board's playbook."""
-    from mlopt_torch.contraction_policy import greedy  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from kit_torch.contraction_policy import greedy  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     return greedy(tensors, sizes)
 

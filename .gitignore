@@ -34,8 +34,8 @@ env/
 checkpoints/
 checkpoints/
 # ...except weights that are deliberately shipped with a package
-# (mlopt_torch.contraction_policy's bundled curriculum player).
-!packages/mlopt-torch/src/mlopt_torch/artifacts/*.pt
+# (kit_torch.contraction_policy's bundled curriculum player).
+!packages/kit-torch/src/kit_torch/artifacts/*.pt
 
 # IDEs
 .vscode/

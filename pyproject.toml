@@ -72,7 +72,7 @@ source_modules = [
 ]
 forbidden_modules = [
     "mlopt_core",
-    "mlopt_torch",
+    "kit_torch",
     "kit_carriers",
     "mlopt_orchestrator",
     "kit_cuda",

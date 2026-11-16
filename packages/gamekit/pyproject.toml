@@ -12,7 +12,7 @@ requires-python = ">=3.11"
 # kernel is substrate-free" contract in the root pyproject), and the
 # player *folders* bind domain machinery lazily inside their ``make``
 # factories — the domain brings its own substrate (kit-discovery,
-# mlopt-torch) into the caller's environment.
+# kit-torch) into the caller's environment.
 dependencies = []
 
 [tool.setuptools.packages.find]

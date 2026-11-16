@@ -1,7 +1,7 @@
 """``distilled`` — the oe-all distilled contraction player.
 
 The shipped contraction-ordering player:
-:class:`mlopt_torch.contraction_policy.ContractionPolicy` over the
+:class:`kit_torch.contraction_policy.ContractionPolicy` over the
 bundled ``contraction_policy_distilled.pt`` weights — a
 ``PairPolicyNet`` distilled on every trial trajectory of
 ``opt_einsum``'s ``RandomGreedy`` teacher on
@@ -31,7 +31,7 @@ from gamekit.players.registry import PlayerSpec
 
 __all__ = ["SPECS", "make"]
 
-_ARTIFACT = "mlopt_torch/artifacts/contraction_policy_distilled.pt"
+_ARTIFACT = "kit_torch/artifacts/contraction_policy_distilled.pt"
 
 SPECS: tuple[PlayerSpec, ...] = (
     PlayerSpec(
@@ -40,7 +40,7 @@ SPECS: tuple[PlayerSpec, ...] = (
         boards=("contraction",),
         schema=(
             "scale-free-v1 — state 7 + pair 9 "
-            "(mlopt_torch.contraction_policy)"
+            "(kit_torch.contraction_policy)"
         ),
         train="bench/drivers/probes/contraction/contraction_distill.py --save",
         artifact=_ARTIFACT,
@@ -79,7 +79,7 @@ def make(
     ``temperature`` (default ``SAMPLE_TEMP``), ``device`` (default
     ``"cpu"``) and optionally ``path`` for a non-default artifact.
     """
-    from mlopt_torch.contraction_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from kit_torch.contraction_policy import (  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
         SAMPLE_TEMP,
         load_contraction_policy,
     )

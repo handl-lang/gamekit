@@ -35,7 +35,7 @@ The kernel is stdlib-only — an import-linter contract pins
 ``players._base``, ``players.registry`` and ``advantage`` to import
 nothing outside it.  The player *folders* are deliberately outside
 that contract: their ``make`` factories bind domain machinery
-(``kit_discovery.play``, ``mlopt_torch.contraction_policy``, …)
+(``kit_discovery.play``, ``kit_torch.contraction_policy``, …)
 lazily, which is the registry contract working as intended.
 
 The ``kit_discovery.engine`` / ``.scoring`` / ``.advantage`` /

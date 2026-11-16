@@ -148,7 +148,7 @@ def test_folder_makes_decline_honestly_without_domains():
     player = arm(0)
     tensors = [frozenset({0, 1}), frozenset({1, 2})]
     sizes = {0: 2, 1: 3, 2: 4}
-    with pytest.raises(ModuleNotFoundError, match="mlopt_torch"):
+    with pytest.raises(ModuleNotFoundError, match="kit_torch"):
         player(tensors, sizes)
 
 
@@ -162,7 +162,7 @@ def test_random_contraction_arm_is_seeded_factory():
 
 
 def test_domain_bound_makes_raise_without_substrate():
-    """Folders whose board needs ``kit_discovery``/``mlopt_torch``
+    """Folders whose board needs ``kit_discovery``/``kit_torch``
     decline at the lazy import inside ``make`` — or inside the arm's
     first call — never a silent wrong player."""
     with pytest.raises((ImportError, KeyError, ModuleNotFoundError)):

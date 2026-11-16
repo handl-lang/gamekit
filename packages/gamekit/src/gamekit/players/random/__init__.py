@@ -54,7 +54,7 @@ def _rand_cost(
     tensors: Any, sizes: dict[int, int], rng: random.Random
 ) -> float:
     """Contract a uniformly-random pair per step; return the cost."""
-    from mlopt_torch.contraction_policy import merge_tensors, pair_cost  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from kit_torch.contraction_policy import merge_tensors, pair_cost  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     ts = [frozenset(t) for t in tensors]
     total = 0.0
