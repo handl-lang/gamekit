@@ -17,10 +17,10 @@ travelled with the Board/players engine into ``gamekit``.
 * :mod:`gamekit.gamedata.moves` — the shared move vocabulary
   (:data:`ARENA_MOVE_ORDER`): gamekit content the feature schema
   sizes its action-identity columns off; the domain side binds the
-  same object through ``mlopt_discovery.lawdata.laws.moves``.
+  same object through ``kit_discovery.lawdata.laws.moves``.
 
-The old path ``mlopt_discovery.lawdata.game`` stays importable — a
-``sys.modules`` alias in ``mlopt_discovery.lawdata`` points it here.
+The old path ``kit_discovery.lawdata.game`` stays importable — a
+``sys.modules`` alias in ``kit_discovery.lawdata`` points it here.
 """
 
 from __future__ import annotations

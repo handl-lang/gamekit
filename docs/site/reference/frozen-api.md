@@ -11,7 +11,7 @@ phase-4 split. The substrate rows are
 
 Plan 0032 lane A landed the in-repo extraction first; the phase-4 split
 moved the package to `handl-lang/gamekit`. Canonical paths are
-`gamekit.*`; the old `mlopt_discovery.{engine,scoring,advantage,players,
+`gamekit.*`; the old `kit_discovery.{engine,scoring,advantage,players,
 lawdata.game}` shims live in graphopt and are not part of this contract.
 
 ## Game contracts

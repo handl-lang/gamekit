@@ -15,7 +15,7 @@ eqsat` edge enforced by the repo's import-linter contract.
   with two methods can be a board — including a hand-rolled toy that
   exercises every driver path in the kernel's own suite.
 - **Players bind the domain lazily.** Each player folder ships a `make`
-  arm factory that imports `mlopt_discovery`/domain machinery *inside*
+  arm factory that imports `kit_discovery`/domain machinery *inside*
   the factory — so `import gamekit.players` stays stdlib-only, and in
   this repo (where no domain substrate is installed) the factories
   decline honestly instead of failing at import.

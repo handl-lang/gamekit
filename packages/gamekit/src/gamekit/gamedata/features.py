@@ -18,7 +18,7 @@ from collections.abc import Mapping
 # ``ARENA_MOVE_ORDER``, the move vocabulary.  At the gamekit
 # extraction (plan 0032 lane A) the constant travelled as gamekit
 # content — ``gamedata.moves`` is its single home, and
-# ``mlopt_discovery.lawdata.laws.moves`` binds the same object
+# ``kit_discovery.lawdata.laws.moves`` binds the same object
 # (pinned by ``tests/test_lawdata.py``).
 from .moves import ARENA_MOVE_ORDER
 

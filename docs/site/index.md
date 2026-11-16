@@ -44,7 +44,7 @@ declares the referee's value function *as data*.
 
 `graphopt` pins `packages/gamekit` as a git dependency — `uv sync` in a
 `graphopt` clone resolves it; the domain registry
-(`mlopt_discovery.play`) seats the boards. Working on the kernel
+(`kit_discovery.play`) seats the boards. Working on the kernel
 itself:
 
 ```sh

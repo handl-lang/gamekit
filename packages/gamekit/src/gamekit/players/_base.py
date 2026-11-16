@@ -246,7 +246,7 @@ def compose_featurizer(parts: tuple) -> Callable:
 #  ``fn`` inside ``StateBroadcast``/``ActionFeats`` parts.  The
 #  registries below give every callable a *name*, so a spec reifies
 #  to a record of tags — the term the player arena
-#  (:mod:`mlopt_discovery.player_arena`) rewrites.  The idiom is the
+#  (:mod:`kit_discovery.player_arena`) rewrites.  The idiom is the
 #  codebase's own: ``meta_arena.ACTIONS``, ``genkernel.TIERS``,
 #  ``lawdata.HANDLERS`` — a new binding is a registry entry, not a
 #  player subclass.

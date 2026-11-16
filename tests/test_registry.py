@@ -162,7 +162,7 @@ def test_random_contraction_arm_is_seeded_factory():
 
 
 def test_domain_bound_makes_raise_without_substrate():
-    """Folders whose board needs ``mlopt_discovery``/``mlopt_torch``
+    """Folders whose board needs ``kit_discovery``/``mlopt_torch``
     decline at the lazy import inside ``make`` — or inside the arm's
     first call — never a silent wrong player."""
     with pytest.raises((ImportError, KeyError, ModuleNotFoundError)):

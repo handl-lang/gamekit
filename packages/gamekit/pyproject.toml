@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 # substrate-free by contract (stdlib-only — the import-linter "game
 # kernel is substrate-free" contract in the root pyproject), and the
 # player *folders* bind domain machinery lazily inside their ``make``
-# factories — the domain brings its own substrate (mlopt-discovery,
+# factories — the domain brings its own substrate (kit-discovery,
 # mlopt-torch) into the caller's environment.
 dependencies = []
 

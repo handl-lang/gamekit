@@ -12,6 +12,6 @@ manifest (`graphopt:docs/public_api.md`).
 - [The frozen API slice](./frozen-api) — the game rows of the manifest,
   vendored verbatim.
 
-The domain registry (`mlopt_discovery.play.DOMAINS`) is a
+The domain registry (`kit_discovery.play.DOMAINS`) is a
 [graphopt](/graphopt/reference/frozen-api) contract — the `Domain`
 *shape* is frozen, the board contents are domain data.

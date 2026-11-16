@@ -111,7 +111,7 @@ ARENA_PLAYER_WEIGHTS: dict[str, float] = {}
 ARENA_PLAYER_CANDIDATES: int | None = 2048
 
 #: The shipped meta-arena prior — V2 (macro-aware, 2026-10-19).
-#: :class:`mlopt_discovery.meta_player.MetaLearnedPlayer` defaults to
+#: :class:`kit_discovery.meta_player.MetaLearnedPlayer` defaults to
 #: it (pass ``weights={}`` for the uniform cold start, the baseline
 #: the measurement keeps).  A trained snapshot:
 #: ``scripts/train_meta_macro_prior.py --init v1 --epochs 30 --scale
@@ -197,7 +197,7 @@ META_ARENA_PLAYER_WEIGHTS: dict[str, float] = {
 }
 
 #: The open-game learned prior — the shipped preset
-#: :class:`mlopt_discovery.open_game.OpenLearnedPlayer` defaults to
+#: :class:`kit_discovery.open_game.OpenLearnedPlayer` defaults to
 #: (empty ⇒ uniform, the cold start the measurement keeps as a
 #: baseline).  A trained snapshot: ``scripts/train_open_prior.py``
 #: (seed 0, 36 even train pages x 5 epochs, cold start) emits exactly
@@ -258,7 +258,7 @@ OPEN_GAME_PLAYER_WEIGHTS: dict[str, float] = {
 }
 
 #: The player-domain learned prior — the meta-arm
-#: :data:`mlopt_discovery.player_arena.PLAYER_SPEC` now defaults to
+#: :data:`kit_discovery.player_arena.PLAYER_SPEC` now defaults to
 #: (the ``LearnedPlayer`` over spec records; pass ``weights={}`` for
 #: the uniform cold start the measurement keeps as a baseline).  A
 #: trained snapshot: ``scripts/train_player_meta_arm.py`` (seed 0,

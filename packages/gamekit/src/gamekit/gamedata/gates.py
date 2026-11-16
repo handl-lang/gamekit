@@ -18,7 +18,7 @@ from .weights import OPEN_GAME_PLAYER_WEIGHTS
 __all__ = ["OPEN_GATED_PAYLOAD"]
 
 #: The incumbent open spec as a ``DomainSpec`` record — the shipped
-#: schema (:data:`mlopt_discovery.open_game.OPEN_GAME_FEATURES`),
+#: schema (:data:`kit_discovery.open_game.OPEN_GAME_FEATURES`),
 #: parts, enumerator and ranker by tag, ``weights=None`` (the
 #: weight block rides in ``rank.weights``/``stop.weights``).  Both
 #: the ranker and the stop row featurize through it — the

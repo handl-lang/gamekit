@@ -1,7 +1,7 @@
 """Players for the generic optimization game — one package, two halves.
 
-Plan 0032 lane A moved this package out of ``mlopt_discovery`` into
-``gamekit``; the old ``mlopt_discovery.players`` path stays
+Plan 0032 lane A moved this package out of ``kit_discovery`` into
+``gamekit``; the old ``kit_discovery.players`` path stays
 importable as a re-exporting shim.
 
 The *base machinery* lives in :mod:`._base` (re-exported here, so the
@@ -19,7 +19,7 @@ is a subpackage here — :mod:`.random`, :mod:`.playbook`,
 feature schema, train entry point, shipped artifact) and a measured
 record in its module docstring.  ``players.registry.make(name,
 board)`` returns the arm factory the comparison runner and the
-``--player`` flag on :mod:`mlopt_discovery.play` consume; adding a
+``--player`` flag on :mod:`kit_discovery.play` consume; adding a
 player is adding a folder.
 """
 

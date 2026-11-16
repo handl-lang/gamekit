@@ -2,7 +2,7 @@
 ``sys.modules`` seats.
 
 The folders' ``make`` factories bind domain machinery lazily — in
-production the domain repo imports ``mlopt_discovery.play.DOMAINS``
+production the domain repo imports ``kit_discovery.play.DOMAINS``
 and friends.  These tests install stub modules for exactly that
 surface, so the factory code paths run for real (a spec-driven
 ``LearnedPlayer`` over the toy spec, a scripted arm over stub
@@ -64,25 +64,25 @@ def domain_env(monkeypatch):
         return lambda i: GreedyPlayer()
 
     meta_arena = _mod(
-        "mlopt_discovery.meta_arena",
+        "kit_discovery.meta_arena",
         GreedyPlayer=GreedyPlayer,
         ScriptedPlayer=ScriptedPlayer,
         Action=Action,
     )
     play = _mod(
-        "mlopt_discovery.play",
+        "kit_discovery.play",
         DOMAINS={"meta": dom, "open": dom, "search": dom, "player": dom},
         _random_policy=_random_policy,
         _scripted_search=_scripted_search,
     )
     proposal = _mod(
-        "mlopt_discovery.proposal",
+        "kit_discovery.proposal",
         _heuristic_score=lambda cand: 1.0,
     )
     player_arena = _mod(
-        "mlopt_discovery.player_arena", GreedyEditor=GreedyEditor
+        "kit_discovery.player_arena", GreedyEditor=GreedyEditor
     )
-    discovery = _mod("mlopt_discovery")
+    discovery = _mod("kit_discovery")
     torch_stub = _mod("torch")
 
     class _Pol:
@@ -155,11 +155,11 @@ def domain_env(monkeypatch):
     torch_stub.no_grad = _NoGrad
 
     mods = {
-        "mlopt_discovery": discovery,
-        "mlopt_discovery.play": play,
-        "mlopt_discovery.meta_arena": meta_arena,
-        "mlopt_discovery.proposal": proposal,
-        "mlopt_discovery.player_arena": player_arena,
+        "kit_discovery": discovery,
+        "kit_discovery.play": play,
+        "kit_discovery.meta_arena": meta_arena,
+        "kit_discovery.proposal": proposal,
+        "kit_discovery.player_arena": player_arena,
         "mlopt_torch": mlopt_torch,
         "mlopt_torch.contraction_policy": contraction,
         "mlopt_torch.learned_policy": learned_policy,
@@ -206,7 +206,7 @@ def test_linear_requires_domainspec(domain_env):
     from gamekit.players.linear import make as lmake
     from gamekit.players.registry import spec
 
-    import mlopt_discovery.play as play
+    import kit_discovery.play as play
 
     play.DOMAINS["bare"] = SimpleNamespace(spec=None, legal=toy_legal)
     with pytest.raises(ValueError, match="ships no DomainSpec"):
@@ -380,7 +380,7 @@ def test_gated_payload_unknown_scorer_declines(domain_env, monkeypatch):
 
 
 def test_gated_requires_domainspec(domain_env):
-    import mlopt_discovery.play as play
+    import kit_discovery.play as play
     from gamekit.players.gated import make as gmake
     from gamekit.players.registry import spec
 

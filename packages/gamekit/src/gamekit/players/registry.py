@@ -5,7 +5,7 @@ this package — one measured record in its docstring, its
 :data:`PlayerSpec` rows, and a ``make`` that binds the domain's
 enumerator/featurizer/weights into the arm factory the game drivers
 consume.  The registry maps *name → spec* so ``--player <name>`` on
-:mod:`mlopt_discovery.play` and the comparison runner
+:mod:`kit_discovery.play` and the comparison runner
 (``bench/players``) enumerate arms from one table.
 
 A :class:`PlayerSpec` is *data*: which boards the player can play, the
@@ -13,7 +13,7 @@ feature schema it scores on, the entry point that trained its shipped
 weights, the artifact that carries them, and the measured record that
 earned it a seat.  Loading is lazy — :func:`spec` imports the folders
 on first touch, so ``import gamekit.players`` stays
-stdlib-only.  The old ``mlopt_discovery.players`` path is a
+stdlib-only.  The old ``kit_discovery.players`` path is a
 re-exporting shim (plan 0032 lane A).
 
 The arm-factory contract: ``registry.make(name, domain, seed, ctx)``

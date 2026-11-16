@@ -85,7 +85,7 @@ def make(
                 tensors, sizes, random.Random(seed + 10_000 + i)
             )
         )
-    from mlopt_discovery.play import DOMAINS, _random_policy  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
+    from kit_discovery.play import DOMAINS, _random_policy  # ty: ignore[unresolved-import] — lazy domain seam (absent here by design)
 
     cls = _random_policy(DOMAINS[domain].legal)
     return lambda i: cls(seed + 10_000 + i)

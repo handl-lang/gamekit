@@ -9,7 +9,7 @@ referee.  The seam it pins (see ``docs/public_api.md``):
   ``{axis, threshold}`` pair) and how the measured axes blend into
   the scalar ``value``;
 * the **measurement** is the gauntlet's
-  (:mod:`mlopt_discovery.evidence` and friends): a plain
+  (:mod:`kit_discovery.evidence` and friends): a plain
   ``{axis: value}`` mapping emitted on the measurement side — plain
   data, so the substrate never imports this module;
 * the **referee** is the composition — :func:`score` is where spec

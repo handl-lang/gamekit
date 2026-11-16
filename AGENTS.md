@@ -19,7 +19,7 @@ contract in `pyproject.toml`.
   `players/{random,playbook,linear,neural,distilled,gated}/` — each
   folder ships its `PlayerSpec`s + a `make` arm factory that binds
   domain machinery **lazily** (the domain repo brings
-  `mlopt_discovery`/`mlopt_torch`/`torch` into the caller's env; in
+  `kit_discovery`/`mlopt_torch`/`torch` into the caller's env; in
   this repo those calls decline honestly — tested),
   `scoring` (`ScoreGate`/`ScoringSpec`/`score` — the referee's value
   function as data), `calibrate` (Platt/isotonic + metrics),
@@ -62,7 +62,7 @@ coverage run -m pytest tests/ -q && coverage report -m   # floor in pyproject
   unpin once the floor re-measures clean on newer ty).
 - Coverage floor re-measured on the fresh kernel suite — see
   `[tool.coverage.report] fail_under`; tighten, never lower.
-- The `mlopt_discovery.{engine,scoring,advantage,players,lawdata.game}`
+- The `kit_discovery.{engine,scoring,advantage,players,lawdata.game}`
   shims live in graphopt — never import them here.
 
 <!-- myco:agent-awareness -->

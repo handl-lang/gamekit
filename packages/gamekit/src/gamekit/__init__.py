@@ -1,7 +1,7 @@
 """The game layer — ``gamekit`` (plan 0032 lane A).
 
 The substrate-free half of the optimization game, extracted out of
-``mlopt_discovery`` so the Board protocol, the player machinery and
+``kit_discovery`` so the Board protocol, the player machinery and
 the referee's value spec can travel to their own repo independently
 of the tensor-law substrate (``gamekit ⊥ eqsat``).
 
@@ -35,10 +35,10 @@ The kernel is stdlib-only — an import-linter contract pins
 ``players._base``, ``players.registry`` and ``advantage`` to import
 nothing outside it.  The player *folders* are deliberately outside
 that contract: their ``make`` factories bind domain machinery
-(``mlopt_discovery.play``, ``mlopt_torch.contraction_policy``, …)
+(``kit_discovery.play``, ``mlopt_torch.contraction_policy``, …)
 lazily, which is the registry contract working as intended.
 
-The ``mlopt_discovery.engine`` / ``.scoring`` / ``.advantage`` /
+The ``kit_discovery.engine`` / ``.scoring`` / ``.advantage`` /
 ``.players`` / ``.lawdata.game`` import paths remain as
 compatibility shims re-exporting this package.
 """

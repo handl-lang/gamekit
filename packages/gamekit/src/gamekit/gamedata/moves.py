@@ -4,7 +4,7 @@ This table moved with the game half of ``lawdata`` at the gamekit
 extraction (plan 0032 lane A): the player feature schema
 (:mod:`gamekit.gamedata.features`) sizes its action-identity columns
 off it, so the constant is gamekit *content*.  The domain side keeps
-one binding — ``mlopt_discovery.lawdata.laws.moves`` re-exports the
+one binding — ``kit_discovery.lawdata.laws.moves`` re-exports the
 same object (single copy; the consumer binds, never forks).
 """
 

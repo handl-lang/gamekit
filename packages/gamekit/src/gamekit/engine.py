@@ -2,8 +2,8 @@
 
 mlopt's three boards — the search environment
 (:class:`mlopt_core.search_env.SearchEnv`), the construction arena
-(:class:`mlopt_discovery.arena.Arena`) and the meta-arena
-(:class:`mlopt_discovery.meta_arena.MetaArena`) — share one shape:
+(:class:`kit_discovery.arena.Arena`) and the meta-arena
+(:class:`kit_discovery.meta_arena.MetaArena`) — share one shape:
 observe a state, play a move, get a report, repeat until done.  This
 module names that shape once (:class:`Board`) and puts the episode
 driver (:func:`run_episode`), the arm comparison (:func:`evaluate`)
@@ -12,7 +12,7 @@ and the training loop (:func:`train_policy`) over it — the two arena
 
 A new *domain* is data + a small adapter: a factory ``case ->
 Board`` and a featurizer for the learned player
-(:mod:`gamekit.players`).  :mod:`mlopt_discovery.play`
+(:mod:`gamekit.players`).  :mod:`kit_discovery.play`
 keeps the registry.
 """
 
