@@ -75,7 +75,7 @@ forbidden_modules = [
     "mlopt_torch",
     "kit_carriers",
     "mlopt_orchestrator",
-    "mlopt_cuda",
+    "kit_cuda",
     "kit_onnx",
     "mlopt_discovery",
     "mlopt_native",
