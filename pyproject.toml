@@ -38,7 +38,7 @@ gamekit = { workspace = true }
 # declares this dep.  ``v0.1.0`` tags pin the git-URL-at-tag release
 # scheme — bump deliberately on releases.
 # See graphopt/docs/reports/git_url_distribution.md.
-mlopt-core = { git = "https://github.com/handl-lang/eqsat.git", subdirectory = "packages/mlopt-core", tag = "v0.1.8" }
+mlopt-core = { git = "https://github.com/handl-lang/eqsat.git", subdirectory = "packages/mlopt-core", tag = "v0.1.9" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -73,7 +73,7 @@ source_modules = [
 forbidden_modules = [
     "mlopt_core",
     "mlopt_torch",
-    "mlopt_carriers",
+    "kit_carriers",
     "mlopt_orchestrator",
     "mlopt_cuda",
     "kit_onnx",
