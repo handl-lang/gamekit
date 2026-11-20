@@ -5,8 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gamekit-meta"
 version = "0.1.0dev"
-description = "Meta distribution for the gamekit repo — the game layer for the mlopt game: Board protocol, episode/train/eval drivers, the player registry machinery, the scoring spec, score calibration and the game weight tables.  Extracted from handl-lang/graphopt (plan 0032 phase 4)."
+description = "Meta distribution for the gamekit repo — the game layer for the mlopt game: Board protocol, episode/train/eval drivers, the player registry machinery, the scoring spec, score calibration and the game weight tables."
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = ["gamekit"]
 

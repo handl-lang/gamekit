@@ -1,9 +1,10 @@
 # gamekit
 
-The game layer for the mlopt game — extracted from
-`handl-lang/graphopt` (plan 0032 phase 4).  Substrate-free by
+The game layer for the mlopt game.  Substrate-free by
 contract (`gamekit ⊥ eqsat`): the kernel imports nothing outside the
 stdlib.
+
+## Packages
 
 - `packages/gamekit` — `gamekit.engine` (the `Board` protocol +
   `run_episode`/`evaluate`/`train_policy`/`imitate_policy` drivers),
@@ -14,8 +15,8 @@ stdlib.
   `gamekit.calibrate` (Platt/isotonic calibration + metrics),
   `gamekit.advantage` (the actor-critic player),
   `gamekit.gamedata` (the game weight/feature/move tables).
-- `packages/benchkit` — the benchmark harness promoted out of
-  graphopt's `bench/` (plan 0032): `Case`/`Variant`/`Runner`/`Report`,
+- `packages/benchkit` — the benchmark harness:
+  `Case`/`Variant`/`Runner`/`Report`,
   the JSONL ledger + resume `Checkpoint`, baseline comparison
   (`benchkit.baselines` contract types — `expectation_gaps` takes the
   caller's suite catalog, no `bench.registry` import), and the report
@@ -28,9 +29,7 @@ stdlib.
 
 Downstream domain repos (`graphopt`, `kernelopt`) consume this as a
 pinned git dep on `packages/gamekit` (and `packages/benchkit`
-for the harness) — `branch = "main"` today, moving to
-`tag = "vX.Y.Z"` (this repo ships `v0.1.0`) once the tags are
-pushed; see `graphopt/docs/reports/git_url_distribution.md` — the domain brings its own
+for the harness) — the domain brings its own
 substrate into the caller's environment; the player folders' `make`
 factories bind it lazily.
 
@@ -38,20 +37,22 @@ factories bind it lazily.
 
 ```sh
 uv sync --group dev
-.venv/bin/python -m pytest tests/ -q
-.venv/bin/ruff check packages
-.venv/bin/ruff format --check packages
-.venv/bin/ty check
-.venv/bin/lint-imports
 ```
+
+## Verify
+
+```sh
+uv run scripts/gate.py --coverage   # pytest → ruff → ty → lint-imports → coverage floor
+```
+
+`scripts/gate.py` is a stdlib runner over the dev toolchain.  The
+coverage floor (`[tool.coverage.report] fail_under = 98`) was
+re-measured on the kernel suite — tighten, never lower.
+
+## License
+
+MIT.
 
 ## Documentation
 
-Published site (Diátaxis): <https://handl-lang.github.io/docs/gamekit/>
-
-- [Reference](https://handl-lang.github.io/docs/gamekit/reference/) — API and schemas
-- [How-to](https://handl-lang.github.io/docs/gamekit/how-to/) — task recipes
-- [Explanation](https://handl-lang.github.io/docs/gamekit/explanation/) — design and rationale
-
-Project docs (ADRs, backlog, design notes) ship on the `project` branch and are
-published under [`/gamekit/project/`](https://handl-lang.github.io/docs/gamekit/project/).
+<https://handl-lang.github.io/docs/gamekit/>
