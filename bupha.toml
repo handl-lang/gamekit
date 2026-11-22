@@ -1,0 +1,21 @@
+# bupha.toml — committed CI manifest for handl-lang/gamekit.
+#
+# The runner is this repo's ci.sh (uv sync dev group → ruff lint+format
+# → ty scoped to packages/gamekit → vulture → import-linter → suite
+# under the pyproject coverage floor), executed natively in a detached
+# worktree of the pushed sha. Merge the [[repos]] entry into the shared
+# watcher (~/.config/bupha/bupha.toml), or run a dedicated instance with:
+# bupha watch --config bupha.toml
+
+[[repos]]
+name = "handl-lang/gamekit"
+dir = "/home/luis/GitHub/handl-lang/gamekit"
+branch = "refs/heads/main"
+  [repos.runner]
+  kind = "script"
+  cmd = "bash ci.sh"
+  cancel_running = true
+
+[status]
+kind = "github"
+context = "ci/bupha"

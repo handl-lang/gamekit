@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "gamekit"
 version = "0.1.0dev"
 description = "The game layer for mlopt: the Board protocol, episode/train/eval drivers, the player registry machinery, the scoring spec, score calibration and the game weight tables (plan 0032 lane A)."
+license = "MIT"
 requires-python = ">=3.11"
 # Deliberately zero declared dependencies: the game *kernel* is
 # substrate-free by contract (stdlib-only — the import-linter "game

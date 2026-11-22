@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "benchkit"
 version = "0.1.0dev"
 description = "The mlopt benchmark harness — Case/Variant/Runner/Report, the JSONL ledger + resume checkpoints, baseline comparison, and the report renderers.  Promoted out of handl-lang/graphopt's bench/ (plan 0032): domain-agnostic, usable by any domain repo."
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
     # The timing runner is built on torch.utils.benchmark and the
