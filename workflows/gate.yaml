@@ -1,0 +1,132 @@
+# workflows/gate.yaml — bespoke per-push gate for gamekit.
+#
+# Replaces the generated `handl-gates` python campaign: the ladder below
+# is the repo's ci.sh contract inlined as a shell node (ci.sh stays in
+# the tree until the fleet cuts over; this file no longer invokes it).
+#
+# Bupha/the fleet runner invokes:
+#
+#   GATE_REPO="$PWD" GATE_RESULTS="$PWD/.gate-results.jsonl" \
+#     peregrin campaign run workflows/gate.yaml --result .ci-result.json
+#
+# Verdict: .ci-result.json `.conclusion` == "success" (result: rules map
+# gate.pass/gate.fail + failure events).
+#
+# Ladder (ci.sh / AGENTS.md): uv sync --group dev → ruff check packages →
+# ruff format --check packages → ty check packages/gamekit (scoped —
+# benchkit's heavy deps stay out of the dev group) → vulture packages →
+# lint-imports → coverage run pytest → coverage report (pyproject
+# fail_under floor).
+name: gate-gamekit
+
+result:
+  - event: gate.pass
+    conclusion: success
+  - event: gate.fail
+    conclusion: failure
+  - event: gate.failed
+    conclusion: failure
+  - event: gate.init.failed
+    conclusion: failure
+  - event: ensure.failed
+    conclusion: failure
+
+capabilities:
+  env:
+    - GATE_REPO
+    - GATE_RESULTS
+    - GATE_TARGET_DIR
+    - GATE_ENV_FILE
+
+nodes:
+  # --- init: validate inputs, fresh results file --------------------
+  - id: gate.init
+    driver: shell
+    on: [start]
+    emits: [gate.due, gate.init.failed]
+    params:
+      cmd: >-
+        set -u;
+        REPO="${config.gate.repo:-${env("GATE_REPO","")}}";
+        [ -n "$REPO" ] || { echo "gate.repo is required — set GATE_REPO or config.gate.repo to an absolute checkout path"; exit 1; };
+        [ -d "$REPO" ] || { echo "no such directory: $REPO"; exit 1; };
+        RES="${config.gate.results:-${env("GATE_RESULTS","$HOME/.local/share/handl-gates/python.results.jsonl")}}";
+        mkdir -p "$(dirname "$RES")";
+        : > "$RES";
+        echo "gate-gamekit: repo=$REPO results=$RES"
+      timeout: 60
+      emit:
+        "0": gate.due
+        default: gate.init.failed
+
+  # --- ensure: sibling layout + shared cargo target env ------------
+  - include: tamias:handl-gates@0.2.1//lib/ensure-siblings.node.yml
+    id: gate.ensure
+    on: [gate.due]
+    emits: [ensure.done, ensure.failed]
+    params:
+      repo: '${config.gate.repo:-${env("GATE_REPO","")}}'
+      target_dir: '${config.gate.target_dir:-${env("GATE_TARGET_DIR","auto")}}'
+      env_file: '${config.gate.env_file:-${env("GATE_ENV_FILE","auto")}}'
+      emit:
+        "0": ensure.done
+        default: ensure.failed
+
+  # --- ladder: the ci.sh gate inlined --------------------------------
+  - id: gate.ladder
+    driver: shell
+    on: [ensure.done]
+    emits: [gate.done, gate.failed]
+    params:
+      repo: '${config.gate.repo:-${env("GATE_REPO","")}}'
+      results: '${config.gate.results:-${env("GATE_RESULTS","$HOME/.local/share/handl-gates/python.results.jsonl")}}'
+      env_file: '${config.gate.env_file:-${env("GATE_ENV_FILE","auto")}}'
+      timeout: 3600
+      cmd: |
+        set -uo pipefail;
+        REPO="${params.repo}";
+        RESULTS="${params.results}";
+        START=$(date +%s);
+        cd "$REPO" || exit 1;
+        REPO="$(pwd)";
+        EF="${params.env_file}";
+        [ "$EF" = "auto" ] && EF="$(dirname "$REPO")/.gate-env/$(basename "$REPO").env";
+        [ -z "$EF" ] || [ ! -f "$EF" ] || . "$EF";
+        export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/bin:/bin";
+        ( set -euo pipefail;
+          uv sync --group dev;
+          .venv/bin/ruff check packages;
+          .venv/bin/ruff format --check packages;
+          .venv/bin/ty check packages/gamekit;
+          .venv/bin/vulture packages;
+          .venv/bin/lint-imports;
+          .venv/bin/coverage run --source=gamekit -m pytest tests/ -q;
+          .venv/bin/coverage report -m );
+        rc=$?;
+        if [ -n "$RESULTS" ]; then
+          esc=$(printf '%s' "$REPO" | sed 's/\\/\\\\/g; s/"/\\"/g');
+          printf '{"family":"python","repo":"%s","rc":%s,"secs":%s}\n' "$esc" "$rc" "$(( $(date +%s) - START ))" >> "$RESULTS" 2>/dev/null || true;
+        fi;
+        exit $rc
+      emit:
+        "0": gate.done
+        default: gate.failed
+
+  # --- report: terminal verdict from the results record -------------
+  - id: gate.report
+    driver: shell
+    on: [gate.done, gate.failed]
+    emits: [gate.pass, gate.fail]
+    params:
+      cmd: >-
+        set -u;
+        F="${config.gate.results:-${env("GATE_RESULTS","$HOME/.local/share/handl-gates/python.results.jsonl")}}";
+        [ -s "$F" ] || { echo "no results record — gate produced nothing"; exit 1; };
+        line=$(tail -n 1 "$F");
+        rc=$(printf '%s' "$line" | sed -n 's/.*"rc":\([0-9][0-9]*\).*/\1/p');
+        echo "gate-gamekit verdict: $line";
+        [ "${rc:-1}" = "0" ]
+      timeout: 60
+      emit:
+        "0": gate.pass
+        default: gate.fail
