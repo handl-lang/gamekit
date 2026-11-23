@@ -60,7 +60,7 @@ nodes:
         default: gate.init.failed
 
   # --- ensure: sibling layout + shared cargo target env ------------
-  - include: tamias:handl-gates@0.2.1//lib/ensure-siblings.node.yml
+  - include: tamias:handl-gates@0.3.0//lib/ensure-siblings.node.yml
     id: gate.ensure
     on: [gate.due]
     emits: [ensure.done, ensure.failed]
