@@ -9,7 +9,7 @@
 
 [[repos]]
 name = "handl-lang/gamekit"
-dir = "/home/luis/GitHub/handl-lang/gamekit"
+dir = "~/GitHub/handl-lang/gamekit"
 branch = "refs/heads/main"
   [repos.runner]
   kind = "script"
