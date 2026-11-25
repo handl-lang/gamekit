@@ -1,19 +1,18 @@
 # bupha.toml — committed CI manifest for handl-lang/gamekit.
 #
-# The runner is this repo's ci.sh (uv sync dev group → ruff lint+format
-# → ty scoped to packages/gamekit → vulture → import-linter → suite
-# under the pyproject coverage floor), executed natively in a detached
-# worktree of the pushed sha. Merge the [[repos]] entry into the shared
-# watcher (~/.config/bupha/bupha.toml), or run a dedicated instance with:
+# The gate is the peregrin campaign in workflows/gate.yaml — ci.sh is
+# retired fleet-wide, so the runner executes the campaign in the pushed
+# worktree and checks .ci-result.json's conclusion (same contract as
+# handl-lang/workspace). Merge the [[repos]] entry into the shared
+# watcher (~/.config/bupha/bupha.toml) or run:
 # bupha watch --config bupha.toml
-
 [[repos]]
 name = "handl-lang/gamekit"
 dir = "~/GitHub/handl-lang/gamekit"
 branch = "refs/heads/main"
   [repos.runner]
   kind = "script"
-  cmd = "bash ci.sh"
+  cmd = "export PATH="$HOME/.local/bin:$PATH"; GATE_REPO="$PWD" GATE_RESULTS="$PWD/.gate-results.jsonl" peregrin campaign run workflows/gate.yaml --result .ci-result.json && jq -e '.conclusion == "success"' .ci-result.json"
   cancel_running = true
 
 [status]
