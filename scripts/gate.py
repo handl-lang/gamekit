@@ -31,19 +31,30 @@ def src_dirs() -> list[str]:
     return dirs or ["."]
 
 
+def pytest_cmd() -> list[str] | None:
+    """Pytest invocation: the ``pytest`` binary, else ``python -m pytest``."""
+    binary = tool("pytest")
+    if binary:
+        return [binary]
+    python = tool("python")
+    if python:
+        return [python, "-m", "pytest"]
+    return None
+
+
 def main() -> int:
     coverage = "--coverage" in sys.argv
     pyproject = PYPROJECT.read_text() if PYPROJECT.is_file() else ""
     steps: list[tuple[str, list[str]]] = []
 
     if (ROOT / "tests").is_dir():
-        pytest = tool("pytest") or tool("python")
+        pytest = pytest_cmd()
         if pytest:
             if coverage and tool("coverage"):
                 steps.append(("coverage", [tool("coverage"), "run", "-m", "pytest", "tests/", "-q"]))
                 steps.append(("coverage-report", [tool("coverage"), "report", "-m"]))
             else:
-                steps.append(("pytest", [pytest, "-m", "pytest", "tests/", "-q"]))
+                steps.append(("pytest", [*pytest, "tests/", "-q"]))
 
     ruff = tool("ruff")
     if ruff:
